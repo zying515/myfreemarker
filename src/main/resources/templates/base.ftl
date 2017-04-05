@@ -1,8 +1,10 @@
-<html>
+<#assign base = request.contextPath />
+<!DOCTYPE html>
+<html >
 <head>
 <@block name="head">base_head_content</@block>
 </head>
 <body>
-<@block name="body">base_body_content</@block>
+<@block name="body">中国${base} </@block>
 </body>
 </html>

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 public class HelloController {
-    @Value("${name}")
+   // @Value("${name}")
     private String name;
 
 
@@ -31,11 +31,12 @@ public class HelloController {
 
     @RequestMapping("/hello")
     public String hello(Map<String,Object> map){
+        name="a";
        map.put("name", name);
         configuration.setSharedVariable("block",new BlockDirective());
         configuration.setSharedVariable("override", new OverrideDirective());
         configuration.setSharedVariable("extends", new ExtendsDirective());
-        return "child";
+        return "base";
     }
    
 }

@@ -1,5 +1,5 @@
 <html>
 <body>
-welcome longtao  to freemarker!
+welcome ${name}  to freemarker!
 </body>
 </html>
