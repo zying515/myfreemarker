@@ -3,6 +3,7 @@ package com.myfreemarker.controller;
 import ch.qos.logback.core.net.SyslogOutputStream;
 import com.myfreemarker.bean.UserBean;
 import com.myfreemarker.service.LoginService;
+import com.myfreemarker.util.JumpUrlUtil;
 import com.myfreemarker.util.WebSecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,7 +34,7 @@ public class LoginController extends BaseController {
         initRegisterFreemarker();
         String url = getBaseUrl();
         map.put("baseUrl",url);
-        return "/user/login";
+        return JumpUrlUtil.LOGIN_HTML;
     }
 
     /**
@@ -50,40 +51,58 @@ public class LoginController extends BaseController {
         map.put("baseUrl",url);
         if(userBean != null){
             String yzmcode = userBean.getYzmCode();
-            System.out.println("用户名:"+userBean.getUsername()+"验证码:"+yzmcode);
+            //System.out.println("用户名:"+userBean.getUsername()+"验证码:"+yzmcode);
             String password = userBean.getPassword();
             UserBean bean = loginService.login(userBean);
             String check_code = (String) session.getAttribute(WebSecurityConfig.CHECK_CODE);
-            System.out.println("session中验证码为"+check_code);
+            //System.out.println("session中验证码为"+check_code);
             if(bean == null){
                 map.put("success", false);
                 map.put("message", "用户不存在");
-                return "/user/login";
+                return JumpUrlUtil.LOGIN_HTML;
             }else{
                 if (!bean.getPassword().equals(password)) {
                     map.put("success", false);
                     map.put("message", "密码错误");
-                    return "/user/login";
-                } else if(yzmcode == null||yzmcode.trim().length()<=0||!yzmcode.equals(check_code)){
+                    return JumpUrlUtil.LOGIN_HTML;
+                } /*else if(yzmcode == null||yzmcode.trim().length()<=0||!yzmcode.equals(check_code)){
                     map.put("success", false);
                     map.put("message", "验证码不正确，请重新输入");
-                    return "/user/login";
-                }else{
+                    return JumpUrlUtil.LOGIN_HTML;
+                }*/else{
                     // 设置session
                     session.setAttribute(WebSecurityConfig.SESSION_KEY, userBean.getUsername());
                     //session.setAttribute(WebSecurityConfig.SESSION_KEY, userBean);
                     // map.put("username",userBean.getUsername());
                     map.put("success", true);
                     map.put("message", "登录成功");
-                    return "index";
+                    return JumpUrlUtil.INDEX_HTML;
                 }
             }
 
         }else{
             map.put("success", false);
             map.put("message", "用户信息为空");
-            return "/user/login";
+            return JumpUrlUtil.LOGIN_HTML;
         }
 
+    }
+
+    /**
+     * 通过这个方法可以跳转到登录页面
+     * @param map
+     * @return
+     */
+    @RequestMapping("/exit")
+    public String toExit(Map<String,Object> map,HttpSession session){
+        initRegisterFreemarker();
+        String url = getBaseUrl();
+        map.put("baseUrl",url);
+        session.removeAttribute(WebSecurityConfig.SESSION_KEY);
+        String name=(String)session.getAttribute(WebSecurityConfig.SESSION_KEY);
+        if(name==null||name.length()<=0){
+            return JumpUrlUtil.LOGIN_HTML;
+        }
+        return JumpUrlUtil.LOGIN_HTML;
     }
 }

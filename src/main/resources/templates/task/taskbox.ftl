@@ -189,7 +189,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon">author:</span>
-                            <input name="email_to" type="email" class="form-control" placeholder="Email CC">
+                            <input name="author" type="text" class="form-control" placeholder="author">
                         </div>
                     </div>
                     <div class="form-group">
@@ -203,21 +203,18 @@
                     <div class="form-group">
                         <textarea name="remark" id="remark" class="form-control" placeholder="Message" style="height: 120px;"></textarea>
 
-                    <!--<div class="form-group">
-                        <div class="btn btn-success btn-file">
-                            <i class="fa fa-paperclip"></i> Attachment
-                            <input type="file" name="attachment"/>
-                        </div>
-                        <p class="help-block">Max. 32MB</p>
-                    </div>-->
+                    <div class="form-group">
+                             <button type="submit" class="btn bg-olive btn-block">submit</button>
+
+                    </div>
 
                 </div>
-                <div class="modal-footer clearfix">
+               <!-- <div class="modal-footer clearfix">
 
                     <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Discard</button>
 
-                    <button type="submit" class="btn btn-primary pull-left"><i class="fa fa-envelope"></i> Send Message</button>
-                </div>
+                    <button type="submit" class="btn bg-olive btn-block">Sign me in</button>
+                </div>-->
             </form>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->

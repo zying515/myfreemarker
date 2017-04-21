@@ -2,6 +2,7 @@ package com.myfreemarker.controller;
 
 import com.myfreemarker.bean.UserBean;
 import com.myfreemarker.service.RegisterService;
+import com.myfreemarker.util.JumpUrlUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,6 +52,6 @@ public class RegisterController extends BaseController {
            return "error";
         }
         map.put("baseUrl",url);
-        return "index";
+        return JumpUrlUtil.INDEX_HTML;
     }
 }

@@ -12,7 +12,15 @@ public class TaskBean {
     private Date begindate;
     private Date enddate;
     private Date registerdate;
+    private String taskid;
 
+    public String getTaskid() {
+        return taskid;
+    }
+
+    public void setTaskid(String taskid) {
+        this.taskid = taskid;
+    }
 
     public Date getRegisterdate() {
         return registerdate;
