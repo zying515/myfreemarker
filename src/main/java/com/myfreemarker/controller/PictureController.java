@@ -1,6 +1,10 @@
 package com.myfreemarker.controller;
 
+import com.myfreemarker.bean.CmPicture;
+import com.myfreemarker.dao.CmpictureRepository;
 import com.myfreemarker.util.JumpUrlUtil;
+import com.myfreemarker.util.RandomUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import java.io.BufferedOutputStream;
@@ -8,6 +12,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +30,8 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 @Controller
 @RequestMapping("/picture")
 public class PictureController  extends BaseController {
+    @Autowired
+    private CmpictureRepository cmpictureRepository;
     @RequestMapping("/home")
     public String toIndex(Map<String,Object> map, HttpSession session){
         initRegisterFreemarker();
@@ -34,6 +41,19 @@ public class PictureController  extends BaseController {
             return JumpUrlUtil.LOGIN_HTML;
         }
         return JumpUrlUtil.PICTURE_HTML;
+    }
+
+    @RequestMapping("/list")
+    public String toList(Map<String,Object> map, HttpSession session){
+        initRegisterFreemarker();
+        String url = getBaseUrl();
+        map.put("baseUrl",url);
+        if(!checkLogin(session)){
+            return JumpUrlUtil.LOGIN_HTML;
+        }
+        List<CmPicture> cmPictureList=cmpictureRepository.findAll();
+        map.put("pictureList",cmPictureList);
+        return JumpUrlUtil.PICTURE_LIST_HTML;
     }
 
     // 访问路径为：http://ip:port/upload
@@ -66,15 +86,15 @@ public class PictureController  extends BaseController {
     @RequestMapping(value = "/upload", method = RequestMethod.POST)
     @ResponseBody
     public String upload(@RequestParam("file") MultipartFile file) {
-
-       System.out.println("path=="+file.getOriginalFilename());
+      String fileName=getPictureUrl()+ "img_"+RandomUtil.getRandomFileName()+file.getOriginalFilename();
+       System.out.println("path=="+fileName);
         if (!file.isEmpty()) {
             try {
                 // 这里只是简单例子，文件直接输出到项目路径下。
                 // 实际项目中，文件需要输出到指定位置，需要在增加代码处理。
                 // 还有关于文件格式限制、文件大小限制，详见：中配置。
                 BufferedOutputStream out = new BufferedOutputStream(
-                        new FileOutputStream(new File("E:\\java\\idea\\myfreemarker\\src\\main\\resources\\static\\upload\\"+file.getOriginalFilename())));
+                        new FileOutputStream(new File(fileName)));
                 out.write(file.getBytes());
                 out.flush();
                 out.close();
@@ -105,12 +125,26 @@ public class PictureController  extends BaseController {
         List<MultipartFile> files = ((MultipartHttpServletRequest) request).getFiles("file");
         MultipartFile file = null;
         BufferedOutputStream stream = null;
+        CmPicture bean=null;
         for (int i = 0; i < files.size(); ++i) {
             file = files.get(i);
+            bean=new CmPicture();
+            String OriginalFilename=file.getOriginalFilename();
+            String fixed=OriginalFilename.substring(OriginalFilename.lastIndexOf("."),OriginalFilename.length());
+            OriginalFilename = OriginalFilename.substring(0,OriginalFilename.lastIndexOf("."));
+            String fileName="img_"+RandomUtil.getRandomFileName()+OriginalFilename;
+            String fileUrl=getPictureUrl()+ fileName+fixed;
+            bean.setPictureurl(fileUrl);
+            bean.setPicturename(fileName);
+            bean.setPictureDate(new Date());
+            bean.setPicturefix(fixed);
+            System.out.println("path=="+fileName);
+
             if (!file.isEmpty()) {
                 try {
+                    cmpictureRepository.save(bean);
                     byte[] bytes = file.getBytes();
-                    stream = new BufferedOutputStream(new FileOutputStream(new File(file.getOriginalFilename())));
+                    stream = new BufferedOutputStream(new FileOutputStream(new File(fileUrl)));
                     stream.write(bytes);
                     stream.close();
                 } catch (Exception e) {
@@ -123,5 +157,10 @@ public class PictureController  extends BaseController {
         }
         return "upload successful";
     }
-
+  public static void main(String[] args){
+      String OriginalFilename="12.jpg";
+      String fixed=OriginalFilename.substring(OriginalFilename.lastIndexOf("."),OriginalFilename.length());
+      OriginalFilename = OriginalFilename.substring(0,OriginalFilename.lastIndexOf("."));
+      System.out.println("fixed="+OriginalFilename);
+  }
 }

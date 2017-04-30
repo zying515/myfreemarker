@@ -123,22 +123,7 @@ public class TaskController  extends BaseController{
         map.put("itaskList",iteatorable.getContent());
         return JumpUrlUtil.TASK_PAGE_HTML;
     }
-    @Bean
-    public Converter<String, Date> addNewConvert() {
-        return new Converter<String, Date>() {
-            @Override
-            public Date convert(String source) {
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                Date date = null;
-                try {
-                    date = sdf.parse((String) source);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                return date;
-            }
-        };
-    }
+
 
 
 

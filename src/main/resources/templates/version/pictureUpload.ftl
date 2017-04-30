@@ -93,6 +93,7 @@
 <script type="text/javascript">
     // 添加全局站点信息
     var BASE_URL = '${baseUrl}v2.0/js/plugins/webuploader';
+    var HttpBaseUrl='${baseUrl}';
 </script>
 
 

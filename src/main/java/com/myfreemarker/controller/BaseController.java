@@ -7,10 +7,15 @@ import com.myfreemarker.util.WebSecurityConfig;
 import freemarker.template.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Administrator on 2017/3/26.
@@ -19,6 +24,8 @@ import javax.servlet.http.HttpSession;
 public class BaseController {
     @Autowired
     private Configuration configuration;
+    @Value("${pic_url}")
+    private String pictureUrl;
     @Value("${web.url}")
     private String baseUrl;
     private void registerFreemarker(){
@@ -32,6 +39,11 @@ public class BaseController {
     public String getBaseUrl(){
         return baseUrl;
     }
+
+    public String getPictureUrl() {
+        return pictureUrl;
+    }
+
     /**
      * 检查是否登录
      * @param session
@@ -43,6 +55,22 @@ public class BaseController {
             return false;
         }
         return true;
+    }
+    @Bean
+    public Converter<String, Date> addNewConvert() {
+        return new Converter<String, Date>() {
+            @Override
+            public Date convert(String source) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                Date date = null;
+                try {
+                    date = sdf.parse((String) source);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                return date;
+            }
+        };
     }
 
 }

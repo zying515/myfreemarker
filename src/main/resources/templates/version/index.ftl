@@ -64,6 +64,15 @@
                             </li>
                        </ul>
                     </li>
+                    <li>
+                        <a href="index.ftl#"><i class="fa fa fa-globe"></i> <span class="nav-label">图片管理</span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level">
+                            <li><a href="${baseUrl}picture/home">添加图片</a>
+                            </li>
+                            <li><a href="${baseUrl}picture/list">图片列表</a>
+                            </li>
+                        </ul>
+                    </li>
 				</ul>
 
             </div>

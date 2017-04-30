@@ -10,5 +10,7 @@ public class JumpUrlUtil {
     public static final String TASK_HTML="/version/taskAdd";//
     public static final String TASK_PAGE_HTML="/version/TaskSelectPage";
     public static final String PICTURE_HTML="/version/pictureUpload";
+    public static final String PICTURE_LIST_HTML="/version/pictureList";
+
 
 }
